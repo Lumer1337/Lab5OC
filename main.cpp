@@ -88,13 +88,13 @@ int main() {
     myStack.push(1);
     myStack.push(2);
     myStack.push(3);
-
-    std::cout << "Stack before saving to file: " << std::endl;
-    std::cout << myStack.pop() << std::endl;
-    std::cout << myStack.pop() << std::endl;
-    std::cout << myStack.pop() << std::endl;
-
     myStack.saveToFile("myStack.txt");
+    myStack.loadFromFile("myStack.txt");
+
+    std::cout << "Stack after saving to file(321): " << std::endl;
+    std::cout << myStack.pop() << std::endl;
+    std::cout << myStack.pop() << std::endl;
+    std::cout << myStack.pop() << std::endl;
 
     myStack.push(4);
     myStack.push(5);
@@ -103,9 +103,18 @@ int main() {
     myStack.saveToFile("myStack.txt");
     myStack.loadFromFile("myStack.txt");
 
-    std::cout << "Stack after loading from file: " << std::endl;
+    std::cout << "Stack after loading from file(654): " << std::endl;
     std::cout << myStack.pop() << std::endl;
     std::cout << myStack.pop() << std::endl;
     std::cout << myStack.pop() << std::endl;
+
+
+    std::cout << "Stack after loading from file(-1-1-1): " << std::endl;
+    myStack.saveToFile("myStack.txt");
+    myStack.loadFromFile("myStack.txt");
+    std::cout << myStack.pop() << std::endl;
+    std::cout << myStack.pop() << std::endl;
+    std::cout << myStack.pop() << std::endl;
+
     return 0;
 }
