@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 
+
 class Stack {
 private:
     int* array;
@@ -55,9 +56,11 @@ public:
     }
 
     void loadFromFile(std::string filename) {
-        std::ifstream file(filename);
+        std::ifstream file;
+        file.open(filename.c_str());
         if (!file) {
-            throw std::runtime_error("Error opening file.");
+            std::cerr << "Error opening file." << std::endl;
+            return;
         }
         delete[] array;
         file >> size;
@@ -70,16 +73,19 @@ public:
     }
 
     void saveToFile(std::string filename) {
-        std::ofstream file(filename);
-        if (!file.good()) {
-            file.open(filename, std::ios::out);
+        HANDLE hFile = CreateFile(filename.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (hFile == INVALID_HANDLE_VALUE) {
+            std::cerr << "Error creating file." << std::endl;
+            return;
         }
-        file << size << std::endl;
-        file << topIndex << std::endl;
+        std::string data = std::to_string(size) + "\n";
+        data += std::to_string(topIndex) + "\n";
         for (int i = 0; i <= topIndex; i++) {
-            file << array[i] << std::endl;
+            data += std::to_string(array[i]) + "\n";
         }
-        file.close();
+        DWORD bytesWritten;
+        WriteFile(hFile, data.c_str(), data.size(), &bytesWritten, NULL);
+        CloseHandle(hFile);
     }
 };
 
